@@ -2,5 +2,28 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
   <mapper namespace="boards">
+  
+  <insert id="create" parameterType="hashmap">
+  INSERT INTO BOARDS(BOARD_ID,USER_ID,BOARD_PASS,TITLE,CONTENT,WRITER)
+  VALUES (BOARD_ID_SEQ.NEXTVAL,#{userId},#{boardPass},#{title},#{content},#{writer})
+  </insert>
+  
+  <select id="postBring" resultType="data.Board" parameterType="hashmap">
+		SELECT BOARD_ID,TITLE,CONTENT,WRITER,WRITED,VIEWS FROM BOARDS
+	</select>
+	
+	<update id="postModify" parameterType="hashmap">
+		UPDATE BOARDS SET TITLE =#{title} AND CONTENT =#{content} WHERE BOARD_ID = #{boardId}
+	</update>
+	
+	<update id="viewsIncrease" parameterType="int">
+		UPDATE BOARDS SET VIEWS=VIEWS+1 WHERE BOARD_ID = #{boardId}
+	</update>
+	
+	<delete id="postDelete">
+		DELETE FROM BOARDS WHERE BOARD_ID = #{boardId}
+	</delete>
+	
   </mapper>

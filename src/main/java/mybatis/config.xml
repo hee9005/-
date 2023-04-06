@@ -7,10 +7,6 @@
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
 		<setting name="jdbcTypeForNull" value="NULL"/>
 	</settings>
-	<typeAliases>
-	<typeAlias type="data.Users" alias="user"/>
-	<typeAlias alias="reply" type="data.Reply"/>
-	</typeAliases>
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />
@@ -26,5 +22,6 @@
 	</environments>
 	<mappers>
 		<mapper resource="mybatis/mapper/Boards-mapper.xml" />
+		<mapper resource="mybatis/mapper/login-mapper.xml" />
 	</mappers>
 </configuration>

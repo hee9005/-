@@ -4,14 +4,21 @@ import java.sql.Date;
 
 public class Board {
 	int boardId;
+	String userId;
 	String boardPass;
 	String title;
 	String content;
-	String writer;
+	String writer; //닉네임
 	Date writed;
 	int views;
 	
 	
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public int getBoardId() {
 		return boardId;
 	}
