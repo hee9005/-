@@ -11,14 +11,29 @@
   </insert>
   
   <select id="postBring" resultType="data.Board" parameterType="hashmap">
-		SELECT BOARD_ID,TITLE,CONTENT,WRITER,WRITED,VIEWS FROM BOARDS
+	SELECT * FROM
+		(SELECT  t.* FROM
+			(
+			SELECT * FROM
+			BOARDS WHERE WRITED &gt; SYSDATE ORDER BY BOARD_ID
+			) t
+		) WHERE BOARD_ID
+		BETWEEN #{a} AND #{b}
+	</select>
+	
+	<select parameterType="string" resultType="data.Board"
+		id="findByBoardId">SELECT * FROM BOARDS ORDER BY WRITED ASC
+	</select>
+	
+  <select id="post" resultType="data.Board" >
+		SELECT * FROM BOARDS WHERE BOARD_ID=#{boardId}
 	</select>
 	
 	<update id="postModify" parameterType="hashmap">
 		UPDATE BOARDS SET TITLE =#{title} AND CONTENT =#{content} WHERE BOARD_ID = #{boardId}
 	</update>
 	
-	<update id="viewsIncrease" parameterType="int">
+	<update id="viewsIncrease" >
 		UPDATE BOARDS SET VIEWS=VIEWS+1 WHERE BOARD_ID = #{boardId}
 	</update>
 	

@@ -3,15 +3,15 @@ package data;
 import java.sql.Date;
 
 public class Board {
-	int boardId;
-	String userId;
-	String boardPass;
-	String title;
-	String content;
+	int boardId; //등록 순서
+	String userId; // 로그인한 id
+	String boardPass; //비로그인시 게시글 비번
+	String title; //제목
+	String content; //내용
 	String writer; //닉네임
-	Date writed;
-	int views;
-	
+	Date writed; // 등록 날짜
+	int views; //조회수
+	int likes;
 	
 	public String getUserId() {
 		return userId;
@@ -61,4 +61,11 @@ public class Board {
 	public void setViews(int views) {
 		this.views = views;
 	}
+	public int getLikes() {
+		return likes;
+	}
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+	
 }

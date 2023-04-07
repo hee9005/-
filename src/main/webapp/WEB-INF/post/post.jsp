@@ -9,6 +9,7 @@
 </head>
 <body>
 <form action="/post/create">
+
 <c:choose>
 <c:when test="${logon ==false }">
  <b>비밀번호<input type="text" name="boardPass"></b>
@@ -21,7 +22,6 @@
  </c:when>
 </c:choose>
  <b>제목<input type="text" name="title"></b>
- ${logonUser.nick }
  <b>내용<input type="text" name="content"></b>
 <button >작성하기</button>
 </form>

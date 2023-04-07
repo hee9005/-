@@ -12,5 +12,6 @@
 <a href="/user/login">로그인</a>
 </c:if>
 <a href="/post">게시글 작성</a>
+<a href="/post/search?page=1">전체 게시글 보기</a>
 </body>
 </html>

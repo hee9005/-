@@ -37,15 +37,26 @@ public class login_Controllers extends HttpServlet {
 			SqlSession sqlSession = factory.openSession(true);
 
 			User found = sqlSession.selectOne("user.login", id);
-		
-
-				HttpSession session = req.getSession();
-				session.setAttribute("logon", true);
-				session.setAttribute("logonUser", found);
-				resp.sendRedirect("/");
-				return;
 			
+			if(id != null && pass !=null && found !=null) {
+				if(found.getPass().equals(pass)) {
+					HttpSession session = req.getSession();
+					session.setAttribute("logon", true);
+					session.setAttribute("logonUser", found);
+					resp.sendRedirect("/");
+					return;
+					
+				}else {
+					req.getRequestDispatcher("/WEB-INF/user/login.jsp").forward(req, resp);
+				}
+			}else{
+				req.getRequestDispatcher("/WEB-INF/user/login.jsp").forward(req, resp);
+			}
+			
+
+		
+			}
 		}
 		}
-	}
+	
 }
