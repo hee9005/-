@@ -1,4 +1,5 @@
-package postControllers;
+package loginControllers;
+
 
 import java.io.IOException;
 
@@ -7,14 +8,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-@WebServlet("/post/passCheck")
-public class passCheck_controllers extends HttpServlet{
+@WebServlet("/user/logout")
+public class logoutController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String  boardId = req.getParameter("boardId");
-		req.setAttribute("boardId", boardId);
-		req.getRequestDispatcher("/WEB-INF/post/passCheck.jsp").forward(req, resp);
-
+		HttpSession session = req.getSession();
+		session.setAttribute("logon", false);
+		resp.sendRedirect("/");
 	}
 }

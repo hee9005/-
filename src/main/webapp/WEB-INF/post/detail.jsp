@@ -90,8 +90,8 @@
 		<div class="content">${list.content }</div>
 		<c:if test="${list.userId eq logonUser.id}">
 			<div class="edit-buttons">
-				<a href="/post/passCheck">수정</a>
-				<a href="">삭제</a>
+				<a href="/post/passCheck?boardId=${list.boardId }">수정</a>
+				<a href="/post/DeletePassCheck?boardId=${list.boardId }">삭제</a>
 			</div>
 		</c:if>
 	</div>

@@ -7,18 +7,11 @@
   
   <insert id="create" parameterType="hashmap">
   INSERT INTO BOARDS(BOARD_ID,USER_ID,BOARD_PASS,TITLE,CONTENT,WRITER)
-  VALUES (BOARD_ID_SEQ.NEXTVAL,#{userId},#{boardPass},#{title},#{content},#{writer})
+  VALUES (BOARDS_SEQ.NEXTVAL,#{userId},#{boardPass},#{title},#{content},#{writer})
   </insert>
   
   <select id="postBring" resultType="data.Board" parameterType="hashmap">
-	SELECT * FROM
-		(SELECT  t.* FROM
-			(
-			SELECT * FROM
-			BOARDS WHERE WRITED &gt; SYSDATE ORDER BY BOARD_ID
-			) t
-		) WHERE BOARD_ID
-		BETWEEN #{a} AND #{b}
+	SELECT * FROM (SELECT ROWNUM rn, t.* FROM (SELECT * FROM BOARDS ORDER BY writed desc)t ) where rn between #{a} and #{b}
 	</select>
 	
 	<select parameterType="string" resultType="data.Board"
@@ -30,7 +23,7 @@
 	</select>
 	
 	<update id="postModify" parameterType="hashmap">
-		UPDATE BOARDS SET TITLE =#{title} AND CONTENT =#{content} WHERE BOARD_ID = #{boardId}
+		UPDATE BOARDS SET TITLE = #{title} , CONTENT = #{content} WHERE BOARD_ID = #{boardId}
 	</update>
 	
 	<update id="viewsIncrease" >
@@ -40,5 +33,21 @@
 	<delete id="postDelete">
 		DELETE FROM BOARDS WHERE BOARD_ID = #{boardId}
 	</delete>
+	
+	<select id="postCount" resultType="int">
+  SELECT COUNT(*) FROM BOARDS
+</select>
+
+<select id="findByWrited" resultType="data.Board" parameterType="hashmap">
+		SELECT * FROM (SELECT ROWNUM rn, t.* FROM (SELECT * FROM BOARDS ORDER BY writed desc)t ) where rn between #{a} and #{b}
+	</select>
+	
+	<select id="findByViews" resultType="data.Board">
+		SELECT * FROM (SELECT ROWNUM rn, t.* FROM (SELECT * FROM BOARDS ORDER BY views desc)t ) where rn between #{a} and #{b}
+	</select>
+	
+	<select id="findByLikes" resultType="data.Board">
+		SELECT * FROM (SELECT ROWNUM rn, t.* FROM (SELECT * FROM BOARDS ORDER BY likes desc)t ) where rn between #{a} and #{b}
+	</select>
 	
   </mapper>

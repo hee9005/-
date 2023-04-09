@@ -1,6 +1,7 @@
 package postControllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,45 +11,64 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import data.Board;
-
-
-
+import data.User;
 
 @WebServlet("/post/search")
-public class search_Controllers extends HttpServlet{
+public class search_Controllers extends HttpServlet {
+
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		SqlSessionFactory factory = (SqlSessionFactory) req.getServletContext().getAttribute("sqlSessionFactory");
+		SqlSession sqlSession = factory.openSession();
+		User logonUser = (User) req.getSession().getAttribute("logonUser");
 		
 		int p;
 		if (req.getParameter("page") == null) {
 			p = 1;
-		} else {
+		}else {
 			p = Integer.parseInt(req.getParameter("page"));
 		}
-		
-		SqlSessionFactory factory=
-				(SqlSessionFactory)req.getServletContext().getAttribute("sqlSessionFactory");
-		SqlSession sqlSession = factory.openSession(true);	
 		Map<String, Object> map = new HashMap<>();
-		map.put("a", (p - 1) * 6 + 1); // "a" , p*6 - 5;
-		map.put("b", 6 * p);
-		List<Board> replys =sqlSession.selectList("boards.findByBoardId");
-		
-		req.setAttribute("replys", replys);
-//		List<Moim> list = sqlSession.selectList("moims.findSomeByCates", cates);
+		map.put("a", p*10-9);
+		map.put("b", p*10);
 		List<Board> list = sqlSession.selectList("boards.postBring", map);
-		sqlSession.close();
 		req.setAttribute("list", list);
-		System.out.println(list);
-		req.setAttribute("millis", System.currentTimeMillis());
+		String arr = req.getParameter("arr");
+		if (arr == null) {			
+		} else {
+			if (arr.equals("views")) {
+				list = sqlSession.selectList("boards.findByViews", map);
+				req.setAttribute("list", list);
+			} else if (arr.equals("Likes")) {
+				list = sqlSession.selectList("boards.findByLikes", map);
+				req.setAttribute("list", list);
+			} else {
+				list = sqlSession.selectList("boards.findByWrited", map);
+				req.setAttribute("list", list);
+			}
+		}
 		
+		int total = sqlSession.selectOne("boards.postCount");
+		int lastPage = total / 10 + (total % 10 > 0 ? 1 : 0);
+		int last = (int) Math.ceil(p / 5.0) * 5;
+		int start = last -4;
 		
+		last = last > lastPage ? lastPage : last;
+		
+		req.setAttribute("start", start); 
+		req.setAttribute("last", last); 
+		
+		boolean existPrev = p >=6;
+		boolean existNext = lastPage > last;
+		req.setAttribute("existPrev", existPrev);
+		req.setAttribute("existNext", existNext);
+		
+		sqlSession.close();
 		req.getRequestDispatcher("/WEB-INF/post/search.jsp").forward(req, resp);
 	}
 }

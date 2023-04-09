@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="/post/postModify/postPass" method="post">
+<form action="/post/postDelete/postPass">
   <h1>비번을 입력하세요</h1>
   <input type="text" name="boardPass"/>
   <input type="hidden" name="boardId" value="${param.boardId}">
